@@ -1,13 +1,4 @@
-const {
-  addUser,
-  loginUser,
-  logOut,
-  getUser,
-  updateSubscription,
-  changeAvatar,
-  findUserByVerificationToken,
-  resendEmail,
-} = require("../models/users");
+const { addUser, loginUser, logOut, getUser } = require("../models/users");
 
 async function signUpUser(req, res) {
   try {
@@ -30,9 +21,6 @@ async function logInUser(req, res) {
     token: user.token,
     user: {
       email: user.email,
-      subscription: user.subscription,
-      name: user.name,
-      avatarURL: user.avatarURL,
     },
   });
 }
@@ -44,34 +32,7 @@ async function getCurrentUser(req, res) {
   const user = await getUser(req.userId);
   res.status(200).json({
     email: user.email,
-    subscription: user.subscription,
-    name: user.name,
-    avatarURL: user.avatarURL,
   });
-}
-async function updateUserSubscription(req, res) {
-  const user = await updateSubscription(req.body, req.userId);
-  res.status(200).json({ subscription: user.subscription });
-}
-
-async function changeUseravatar(req, res) {
-  const user = await changeAvatar(req, req.userId);
-  res.status(200).json({ avatarURL: user.avatarURL });
-}
-
-async function getUserByVerificationToken(req, res) {
-  const { verificationToken } = req.params;
-  const user = await findUserByVerificationToken(verificationToken);
-  if (!user) {
-    res.status(404).json({ message: `User not found` });
-    return;
-  }
-  res.status(200).json({ message: "Verification successful" });
-}
-
-async function resendVerificationEmail(req, res) {
-  await resendEmail(req.body);
-  res.status(200).json({ message: "Verification email sent" });
 }
 
 module.exports = {
@@ -79,8 +40,4 @@ module.exports = {
   logInUser,
   logOutUser,
   getCurrentUser,
-  updateUserSubscription,
-  changeUseravatar,
-  getUserByVerificationToken,
-  resendVerificationEmail,
 };
