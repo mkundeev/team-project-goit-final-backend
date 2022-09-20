@@ -4,22 +4,22 @@ const {
   logInUser,
   logOutUser,
   getCurrentUser,
-} = require("../controller/usersController");
+} = require("../controllers/usersController");
 
-const { errorHandler } = require("../helpers/errorHandler");
+const { errorHandler } = require("../middlewares/errorHandler");
+const { validation } = require("../middlewares/validate");
+const { authorize } = require("../middlewares/authorize");
 
 const {
-  userRegistartionValidationSchema,
+  userRegistrationValidationSchema,
   userAuthorizationValidationSchema,
-} = require("../models/usersSchema");
-const { validation } = require("../middlewares/validation");
-const { authMW } = require("../middlewares/authMW");
+} = require("../joi/usersSchema");
 
 const router = express.Router();
 
 router.post(
   "/signup",
-  validation(userRegistartionValidationSchema),
+  validation(userRegistrationValidationSchema),
   errorHandler(signUpUser)
 );
 
@@ -29,8 +29,8 @@ router.post(
   errorHandler(logInUser)
 );
 
-router.post("/logout", authMW, errorHandler(logOutUser));
+router.post("/logout", authorize, errorHandler(logOutUser));
 
-router.get("/current", authMW, errorHandler(getCurrentUser));
+router.get("/current", authorize, errorHandler(getCurrentUser));
 
 module.exports = router;

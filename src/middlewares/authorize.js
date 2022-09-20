@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../db/usersSchema.js");
+const { User } = require("../db/schemas/usersSchema.js");
 
-const authMW = async (req, res, next) => {
+const authorize = async (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(401).json({
       message: "Not authorized",
@@ -30,5 +30,5 @@ const authMW = async (req, res, next) => {
 };
 
 module.exports = {
-  authMW,
+  authorize,
 };
