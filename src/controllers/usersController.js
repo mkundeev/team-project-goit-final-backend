@@ -1,4 +1,4 @@
-const { addUser, loginUser, logOut, getUser } = require("../models/users");
+const { addUser, loginUser, logOut, getUser } = require("../db/usersService");
 
 async function signUpUser(req, res) {
   const user = await addUser(req.body);

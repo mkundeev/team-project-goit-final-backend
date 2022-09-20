@@ -1,4 +1,4 @@
-function randomNumberArray(number, totalNumber) {
+function getArrayOfRandomNumbers(number, totalNumber) {
   const set = new Set();
   let arr = [];
   while (arr.length < number) {
@@ -9,5 +9,5 @@ function randomNumberArray(number, totalNumber) {
 }
 
 module.exports = {
-  randomNumberArray,
+  getArrayOfRandomNumbers,
 };

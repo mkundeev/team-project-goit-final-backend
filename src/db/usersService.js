@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User } = require("../db/usersSchema.js");
+const { User } = require("./schemas/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Conflict, InternalServerError, NotFound } = require("http-errors");
