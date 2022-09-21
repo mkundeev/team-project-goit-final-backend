@@ -2,11 +2,11 @@ const { Router } = require("express");
 const { authorize } = require("../middlewares/authorize");
 const { validate } = require("../middlewares/validate");
 const { errorHandler } = require("../middlewares/errorHandler");
-const { answersSchema, answerSchema } = require("../joi/testsSchema");
+const { finishTestSchema, answerSchema } = require("../joi/testsSchema");
 const {
   getTestsList,
   getRandomTests,
-  getTestsResult,
+  getResult,
   setAnswer,
 } = require("../controllers/testsController");
 
@@ -23,11 +23,11 @@ testsRouter.patch(
   errorHandler(setAnswer)
 );
 
-testsRouter.post(
+testsRouter.patch(
   "/result",
   authorize,
-  validate(answersSchema),
-  errorHandler(getTestsResult)
+  validate(finishTestSchema),
+  errorHandler(getResult)
 );
 
 module.exports = testsRouter;

@@ -2,7 +2,12 @@ require("dotenv").config();
 const { User } = require("./schemas/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Conflict, NotFound, BadRequest } = require("http-errors");
+const {
+  Conflict,
+  NotFound,
+  BadRequest,
+  InternalServerError,
+} = require("http-errors");
 
 const addUser = async (body) => {
   if (await User.findOne({ email: body.email })) {
@@ -51,7 +56,24 @@ const logOut = async (userId) => {
 };
 
 const getUser = async (userId) => {
-  return await User.findById(userId, "email token startedTests");
+  const user = await User.findById(userId, "email token startedTests");
+
+  const newUser = {
+    email: user.email,
+    token: user.token,
+    startedTests: user.startedTests.map((el) => ({
+      testId: el.testId,
+      tests: el.tests.map((el) => ({
+        question: el.question,
+        questionId: el.questionId,
+        answers: el.answers,
+      })),
+      currentIndex: el.currentIndex,
+      answers: el.answers,
+    })),
+  };
+
+  return newUser;
 };
 
 const setRandomTests = async (userId, testId, tests) => {
@@ -59,7 +81,7 @@ const setRandomTests = async (userId, testId, tests) => {
   const test = startedTests.find((el) => el.testId === testId);
 
   if (test) {
-    return new BadRequest("The test with such a testId is already open");
+    throw new BadRequest("The test with such a testId is already open");
   }
 
   startedTests.push({
@@ -68,7 +90,8 @@ const setRandomTests = async (userId, testId, tests) => {
   });
 
   await User.findByIdAndUpdate(userId, { startedTests });
-  return startedTests;
+  // return startedTests;
+  return "Success";
 };
 
 const setAnswer = async (userId, answer) => {
@@ -76,7 +99,7 @@ const setAnswer = async (userId, answer) => {
   const test = startedTests.find((el) => el.testId === answer.testId);
 
   if (!test) {
-    return new BadRequest("No such testId was found");
+    throw new BadRequest("No such testId was found");
   }
 
   const newStartedTests = startedTests.map((el) => {
@@ -110,8 +133,50 @@ const setAnswer = async (userId, answer) => {
     return el;
   });
 
-  await User.findByIdAndUpdate(userId, { newStartedTests });
-  return newStartedTests;
+  await User.findByIdAndUpdate(userId, { startedTests: newStartedTests });
+  // return newStartedTests;
+  return "Success";
+};
+
+const getResult = async (userId, finishAnswer) => {
+  const { startedTests } = await User.findById(userId, "startedTests");
+  const clearedStartedTests = startedTests.filter(
+    (el) => el.testId !== finishAnswer.testId
+  );
+  const test = startedTests.find((el) => el.testId === finishAnswer.testId);
+
+  if (!test) {
+    throw new BadRequest("No such testId was found");
+  }
+
+  test.answers.push({
+    questionId: finishAnswer.questionId,
+    answer: finishAnswer.answer,
+  });
+
+  if (test.answers.length < 12) {
+    await User.findByIdAndUpdate(userId, { startedTests: clearedStartedTests });
+    throw new InternalServerError("Not enough answers");
+  }
+
+  const parsedAnswers = {};
+  test.answers.forEach((el) => (parsedAnswers[el.questionId] = el.answer));
+
+  const result = {
+    rightAnswers: 0,
+    wrongAnswers: 0,
+  };
+
+  test.tests.forEach((el) => {
+    if (parsedAnswers[el.questionId]) {
+      el.rightAnswer === parsedAnswers[el.questionId]
+        ? (result.rightAnswers += 1)
+        : (result.wrongAnswers += 1);
+    }
+  });
+
+  await User.findByIdAndUpdate(userId, { startedTests: clearedStartedTests });
+  return result;
 };
 
 module.exports = {
@@ -121,4 +186,5 @@ module.exports = {
   getUser,
   setRandomTests,
   setAnswer,
+  getResult,
 };
