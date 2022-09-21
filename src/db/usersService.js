@@ -2,7 +2,7 @@ require("dotenv").config();
 const { User } = require("./schemas/usersSchema.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Conflict, InternalServerError, NotFound } = require("http-errors");
+const { Conflict, NotFound, BadRequest } = require("http-errors");
 
 const addUser = async (body) => {
   if (await User.findOne({ email: body.email })) {
@@ -29,37 +29,89 @@ const loginUser = async ({ email, password }) => {
     },
     process.env.SECRET
   );
-  const logedInUser = await User.findOneAndUpdate(
+  const loggedInUser = await User.findOneAndUpdate(
     { email },
     { token },
     {
       new: true,
     }
   );
-  return logedInUser;
+  return loggedInUser;
 };
 
 const logOut = async (userId) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { token: null },
-      {
-        new: true,
-      }
-    );
-    return user;
-  } catch (err) {
-    throw new InternalServerError("Server error");
-  }
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { token: null },
+    {
+      new: true,
+    }
+  );
+  return user;
 };
 
 const getUser = async (userId) => {
-  try {
-    return User.findById(userId);
-  } catch (err) {
-    throw new InternalServerError("Server error");
+  return await User.findById(userId, "email token startedTests");
+};
+
+const setRandomTests = async (userId, testId, tests) => {
+  const { startedTests } = await User.findById(userId, "startedTests");
+  const test = startedTests.find((el) => el.testId === testId);
+
+  if (test) {
+    return new BadRequest("The test with such a testId is already open");
   }
+
+  startedTests.push({
+    testId,
+    tests,
+  });
+
+  await User.findByIdAndUpdate(userId, { startedTests });
+  return startedTests;
+};
+
+const setAnswer = async (userId, answer) => {
+  const { startedTests } = await User.findById(userId, "startedTests");
+  const test = startedTests.find((el) => el.testId === answer.testId);
+
+  if (!test) {
+    return new BadRequest("No such testId was found");
+  }
+
+  const newStartedTests = startedTests.map((el) => {
+    if (el.testId !== answer.testId) {
+      return el;
+    }
+
+    el.currentIndex = answer.currentIndex;
+
+    if (!answer.questionId || !answer.answer) {
+      return el;
+    }
+
+    const identicalAnswer = el.answers.find(
+      (el) => el.questionId === answer.questionId
+    );
+
+    if (identicalAnswer) {
+      el.answers.map((el) => {
+        if (el.questionId !== answer.questionId) {
+          return el;
+        }
+
+        el.answer = answer.answer;
+        return el;
+      });
+    } else {
+      el.answers.push({ questionId: answer.questionId, answer: answer.answer });
+    }
+
+    return el;
+  });
+
+  await User.findByIdAndUpdate(userId, { newStartedTests });
+  return newStartedTests;
 };
 
 module.exports = {
@@ -67,4 +119,6 @@ module.exports = {
   loginUser,
   logOut,
   getUser,
+  setRandomTests,
+  setAnswer,
 };

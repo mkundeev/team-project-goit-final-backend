@@ -1,24 +1,32 @@
 const { Router } = require("express");
 const { authorize } = require("../middlewares/authorize");
-const { validation } = require("../middlewares/validate");
+const { validate } = require("../middlewares/validate");
 const { errorHandler } = require("../middlewares/errorHandler");
-const { answersSchema } = require("../joi/testsSchema");
+const { answersSchema, answerSchema } = require("../joi/testsSchema");
 const {
   getTestsList,
   getRandomTests,
   getTestsResult,
+  setAnswer,
 } = require("../controllers/testsController");
 
 const testsRouter = Router();
 
 testsRouter.get("/", authorize, errorHandler(getTestsList));
 
-testsRouter.get("/random/:testType", authorize, errorHandler(getRandomTests));
+testsRouter.get("/random/:testId", authorize, errorHandler(getRandomTests));
+
+testsRouter.patch(
+  "/answer",
+  authorize,
+  validate(answerSchema),
+  errorHandler(setAnswer)
+);
 
 testsRouter.post(
   "/result",
   authorize,
-  validation(answersSchema),
+  validate(answersSchema),
   errorHandler(getTestsResult)
 );
 

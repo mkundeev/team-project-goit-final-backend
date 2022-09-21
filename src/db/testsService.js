@@ -1,4 +1,3 @@
-// const {} = require("http-errors");
 const { TestModel } = require("./schemas/testsSchema");
 const {
   getArrayOfRandomNumbers,
@@ -9,9 +8,12 @@ const getTestsList = async () => {
   return testsList;
 };
 
-const getRandom = async (testType) => {
-  const response = await TestModel.findOne({ topic: testType });
-  const randomTestsIndexes = getArrayOfRandomNumbers(12, response.tests.length);
+const getRandom = async (testId) => {
+  const response = await TestModel.findOne({ _id: testId });
+  const randomTestsIndexes = getArrayOfRandomNumbers(
+    12,
+    response.tests.length - 1
+  );
   const randomTests = randomTestsIndexes.map((el) => response.tests[el]);
   return randomTests;
 };

@@ -33,4 +33,4 @@ const testSchema = new Schema({
 
 const TestModel = mongoose.model("test", testSchema);
 
-module.exports = { TestModel };
+module.exports = { TestModel, testsSchema };

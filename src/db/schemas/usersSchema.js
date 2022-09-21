@@ -1,5 +1,36 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { testsSchema } = require("./testsSchema");
+
+const answersSchema = new mongoose.Schema({
+  questionId: {
+    type: Number,
+    required: true,
+  },
+  answer: {
+    type: String,
+    required: true,
+  },
+});
+
+const startedTestSchema = new mongoose.Schema({
+  testId: {
+    type: String,
+    required: true,
+  },
+  tests: {
+    type: [testsSchema],
+    required: true,
+  },
+  currentIndex: {
+    type: Number,
+    default: 0,
+  },
+  answers: {
+    type: [answersSchema],
+    default: [],
+  },
+});
 
 const usersSchema = new mongoose.Schema({
   password: {
@@ -14,6 +45,10 @@ const usersSchema = new mongoose.Schema({
   token: {
     type: String,
     default: null,
+  },
+  startedTests: {
+    type: [startedTestSchema],
+    default: [],
   },
 });
 
