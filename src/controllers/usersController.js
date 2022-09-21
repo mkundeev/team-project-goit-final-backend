@@ -11,9 +11,7 @@ async function logInUser(req, res) {
   const user = await loginUser(req.body);
   res.status(200).json({
     token: user.token,
-    user: {
-      email: user.email,
-    },
+    email: user.email,
   });
 }
 async function logOutUser(req, res) {
@@ -24,6 +22,7 @@ async function getCurrentUser(req, res) {
   const user = await getUser(req.userId);
   res.status(200).json({
     email: user.email,
+    token: user.token,
   });
 }
 
