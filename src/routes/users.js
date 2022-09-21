@@ -7,7 +7,7 @@ const {
 } = require("../controllers/usersController");
 
 const { errorHandler } = require("../middlewares/errorHandler");
-const { validation } = require("../middlewares/validate");
+const { validate: validation } = require("../middlewares/validate");
 const { authorize } = require("../middlewares/authorize");
 
 const {

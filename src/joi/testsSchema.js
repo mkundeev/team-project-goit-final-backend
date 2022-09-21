@@ -12,4 +12,11 @@ const answersSchema = Joi.object({
     .required(),
 }).required();
 
-module.exports = { answersSchema };
+const answerSchema = Joi.object({
+  testId: Joi.string().required(),
+  currentIndex: Joi.number().required(),
+  questionId: Joi.number(),
+  answer: Joi.string(),
+});
+
+module.exports = { answersSchema, answerSchema };

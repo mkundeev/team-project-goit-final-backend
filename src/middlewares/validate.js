@@ -1,5 +1,5 @@
 module.exports = {
-  validation: (schema, reqPart = "body") => {
+  validate: (schema, reqPart = "body") => {
     return (req, res, next) => {
       const validationSchema = schema.validate(req[reqPart], {
         abortEarly: false,
