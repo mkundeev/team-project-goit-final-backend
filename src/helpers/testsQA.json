@@ -1,5 +1,5 @@
 {"topic":"QA technical training",
-    "test":[
+    "tests":[
   {
     "question": "How many testing principles are there?",
     "questionId": 1,
