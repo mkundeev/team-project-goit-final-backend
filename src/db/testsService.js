@@ -12,7 +12,7 @@ const getTestsList = async () => {
 const getRandom = async (testId) => {
   const response = await TestModel.findOne({ _id: testId });
 
-  if (response.test.length < 12) {
+  if (response.tests.length < 12) {
     throw new InternalServerError("Invalid tests length");
   }
 
