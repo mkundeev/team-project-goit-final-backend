@@ -2,6 +2,7 @@ const { TestModel } = require("./schemas/testsSchema");
 const {
   getArrayOfRandomNumbers,
 } = require("../helpers/getArrayOfRandomNumbers");
+const { InternalServerError } = require("http-errors");
 
 const getTestsList = async () => {
   const testsList = await TestModel.find({}, "_id topic");
@@ -10,6 +11,11 @@ const getTestsList = async () => {
 
 const getRandom = async (testId) => {
   const response = await TestModel.findOne({ _id: testId });
+
+  if (response.test.length < 12) {
+    throw new InternalServerError("Invalid tests length");
+  }
+
   const randomTestsIndexes = getArrayOfRandomNumbers(
     12,
     response.tests.length - 1

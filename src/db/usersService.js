@@ -58,7 +58,7 @@ const logOut = async (userId) => {
 const getUser = async (userId) => {
   const user = await User.findById(userId, "email token startedTests");
 
-  const newUser = {
+  const userWithoutRightAnswer = {
     email: user.email,
     token: user.token,
     startedTests: user.startedTests.map((el) => ({
@@ -73,7 +73,7 @@ const getUser = async (userId) => {
     })),
   };
 
-  return newUser;
+  return userWithoutRightAnswer;
 };
 
 const setRandomTests = async (userId, testId, tests) => {
@@ -90,8 +90,19 @@ const setRandomTests = async (userId, testId, tests) => {
   });
 
   await User.findByIdAndUpdate(userId, { startedTests });
-  // return startedTests;
-  return "Success";
+
+  const startedTestsWithoutRightAnswer = startedTests.map((el) => ({
+    testId: el.testId,
+    tests: el.tests.map((el) => ({
+      question: el.question,
+      questionId: el.questionId,
+      answers: el.answers,
+    })),
+    currentIndex: el.currentIndex,
+    answers: el.answers,
+  }));
+
+  return startedTestsWithoutRightAnswer;
 };
 
 const setAnswer = async (userId, answer) => {
@@ -134,8 +145,19 @@ const setAnswer = async (userId, answer) => {
   });
 
   await User.findByIdAndUpdate(userId, { startedTests: newStartedTests });
-  // return newStartedTests;
-  return "Success";
+
+  const startedTestsWithoutRightAnswer = newStartedTests.map((el) => ({
+    testId: el.testId,
+    tests: el.tests.map((el) => ({
+      question: el.question,
+      questionId: el.questionId,
+      answers: el.answers,
+    })),
+    currentIndex: el.currentIndex,
+    answers: el.answers,
+  }));
+
+  return startedTestsWithoutRightAnswer;
 };
 
 const getResult = async (userId, finishAnswer) => {
