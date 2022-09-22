@@ -16,8 +16,8 @@ const getRandomTests = async (req, res, next) => {
   res.status(200).send(startedTests);
 };
 
-const getTestsResult = async (req, res, next) => {
-  const result = await testsService.getResult(req.body);
+const getResult = async (req, res, next) => {
+  const result = await usersService.getResult(req.userId, req.body);
   res.status(200).send(result);
 };
 
@@ -26,4 +26,4 @@ const setAnswer = async (req, res, next) => {
   res.status(200).send(startedTests);
 };
 
-module.exports = { getTestsList, getRandomTests, getTestsResult, setAnswer };
+module.exports = { getTestsList, getRandomTests, getResult, setAnswer };

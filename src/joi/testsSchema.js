@@ -1,15 +1,9 @@
 const Joi = require("joi");
 
-const answersSchema = Joi.object({
+const finishTestSchema = Joi.object({
   testId: Joi.string().required(),
-  answers: Joi.array()
-    .items(
-      Joi.object({
-        questionId: Joi.number().required(),
-        answer: Joi.string().required(),
-      }).required()
-    )
-    .required(),
+  questionId: Joi.number().required(),
+  answer: Joi.string().required(),
 }).required();
 
 const answerSchema = Joi.object({
@@ -17,6 +11,6 @@ const answerSchema = Joi.object({
   currentIndex: Joi.number().required(),
   questionId: Joi.number(),
   answer: Joi.string(),
-});
+}).required();
 
-module.exports = { answersSchema, answerSchema };
+module.exports = { finishTestSchema, answerSchema };

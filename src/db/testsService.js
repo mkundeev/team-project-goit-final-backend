@@ -18,25 +18,4 @@ const getRandom = async (testId) => {
   return randomTests;
 };
 
-const getResult = async (answers) => {
-  const response = await TestModel.findById(answers.testId);
-
-  const parsedAnswers = {};
-  answers.answers.forEach((el) => (parsedAnswers[el.questionId] = el.answer));
-
-  const result = {
-    rightAnswers: 0,
-    wrongAnswers: 0,
-  };
-  response.tests.forEach((el) => {
-    if (parsedAnswers[el.questionId]) {
-      el.rightAnswer === parsedAnswers[el.questionId]
-        ? (result.rightAnswers += 1)
-        : (result.wrongAnswers += 1);
-    }
-  });
-
-  return result;
-};
-
-module.exports = { getTestsList, getRandom, getResult };
+module.exports = { getTestsList, getRandom };
