@@ -4,6 +4,7 @@ const {
   logInUser,
   logOutUser,
   getCurrentUser,
+  logInUserWithGoogle,
 } = require("../controllers/usersController");
 
 const { errorHandler } = require("../middlewares/errorHandler");
@@ -27,6 +28,12 @@ router.post(
   "/login",
   validation(userAuthorizationValidationSchema),
   errorHandler(logInUser)
+);
+
+router.post(
+  "/googlelogin",
+  // validation(userAuthorizationValidationSchema),
+  errorHandler(logInUserWithGoogle)
 );
 
 router.post("/logout", authorize, errorHandler(logOutUser));
