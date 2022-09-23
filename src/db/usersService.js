@@ -8,6 +8,13 @@ const {
   BadRequest,
   InternalServerError,
 } = require("http-errors");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client({
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  redirectUri: "http://localhost:3000",
+});
 
 const addUser = async (body) => {
   if (await User.findOne({ email: body.email })) {
@@ -42,6 +49,37 @@ const loginUser = async ({ email, password }) => {
     }
   );
   return loggedInUser;
+};
+
+const loginUserGoogle = async (body) => {
+  const { tokens } = await googleClient.getToken(body.code);
+
+  const ticket = await googleClient.verifyIdToken({
+    idToken: `${tokens.id_token}`,
+    audient: `${process.env.GOOGLE_CLIENT_ID}`,
+  });
+  const { email } = ticket.getPayload();
+
+  let user = await User.findOne({ email });
+  if (!user) {
+    user = await User.create({ email: email });
+    const token = jwt.sign(
+      {
+        _id: user._id,
+      },
+      process.env.SECRET
+    );
+    user = await User.findByIdAndUpdate(user._id, { token }, { new: true });
+  } else {
+    const token = jwt.sign(
+      {
+        _id: user._id,
+      },
+      process.env.SECRET
+    );
+    user = await User.findByIdAndUpdate(user._id, { token }, { new: true });
+  }
+  return user;
 };
 
 const logOut = async (userId) => {
@@ -209,4 +247,5 @@ module.exports = {
   setRandomTests,
   setAnswer,
   getResult,
+  loginUserGoogle,
 };

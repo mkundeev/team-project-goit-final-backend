@@ -35,7 +35,6 @@ const startedTestSchema = new mongoose.Schema({
 const usersSchema = new mongoose.Schema({
   password: {
     type: String,
-    required: [true, "Password is required"],
   },
   email: {
     type: String,
@@ -53,7 +52,7 @@ const usersSchema = new mongoose.Schema({
 });
 
 usersSchema.pre("save", async function () {
-  if (this.isNew) {
+  if (this.isNew && this.password) {
     this.password = await bcrypt.hash(this.password, 10);
   }
 });

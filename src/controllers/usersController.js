@@ -15,6 +15,15 @@ async function logInUser(req, res) {
   });
 }
 
+async function logInUserWithGoogle(req, res) {
+  const user = await usersService.loginUserGoogle(req.body);
+  console.log(user);
+  res.status(200).json({
+    token: user.token,
+    email: user.email,
+  });
+}
+
 async function logOutUser(req, res) {
   await usersService.logOut(req.userId);
   res.status(204).json({ message: "No Content" });
@@ -30,4 +39,5 @@ module.exports = {
   logInUser,
   logOutUser,
   getCurrentUser,
+  logInUserWithGoogle,
 };
