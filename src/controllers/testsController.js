@@ -8,9 +8,12 @@ const getTestsList = async (req, res, next) => {
 
 const getRandomTests = async (req, res, next) => {
   const tests = await testsService.getRandom(req.params.testId);
+  const { topic } = await testsService.getTest(req.params.testId);
+
   const startedTests = await usersService.setRandomTests(
     req.userId,
     req.params.testId,
+    topic,
     tests
   );
   res.status(200).send(startedTests);

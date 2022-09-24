@@ -9,6 +9,11 @@ const getTestsList = async () => {
   return testsList;
 };
 
+const getTest = async (id) => {
+  const testsList = await TestModel.findById(id, "topic");
+  return testsList;
+};
+
 const getRandom = async (testId) => {
   const response = await TestModel.findOne({ _id: testId });
 
@@ -24,4 +29,4 @@ const getRandom = async (testId) => {
   return randomTests;
 };
 
-module.exports = { getTestsList, getRandom };
+module.exports = { getTestsList, getTest, getRandom };

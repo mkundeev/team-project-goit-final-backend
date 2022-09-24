@@ -94,13 +94,18 @@ const logOut = async (userId) => {
 };
 
 const getUser = async (userId) => {
-  const user = await User.findById(userId, "email token startedTests");
+  const user = await User.findById(
+    userId,
+    "email token lastTestResult startedTests"
+  );
 
   const userWithoutRightAnswer = {
     email: user.email,
     token: user.token,
+    lastTestResult: user.lastTestResult,
     startedTests: user.startedTests.map((el) => ({
       testId: el.testId,
+      topic: el.topic,
       tests: el.tests.map((el) => ({
         question: el.question,
         questionId: el.questionId,
@@ -114,7 +119,7 @@ const getUser = async (userId) => {
   return userWithoutRightAnswer;
 };
 
-const setRandomTests = async (userId, testId, tests) => {
+const setRandomTests = async (userId, testId, topic, tests) => {
   const { startedTests } = await User.findById(userId, "startedTests");
   const test = startedTests.find((el) => el.testId === testId);
 
@@ -124,6 +129,7 @@ const setRandomTests = async (userId, testId, tests) => {
 
   startedTests.push({
     testId,
+    topic,
     tests,
   });
 
@@ -131,6 +137,7 @@ const setRandomTests = async (userId, testId, tests) => {
 
   const startedTestsWithoutRightAnswer = startedTests.map((el) => ({
     testId: el.testId,
+    topic: el.topic,
     tests: el.tests.map((el) => ({
       question: el.question,
       questionId: el.questionId,
@@ -186,6 +193,7 @@ const setAnswer = async (userId, answer) => {
 
   const startedTestsWithoutRightAnswer = newStartedTests.map((el) => ({
     testId: el.testId,
+    topic: el.topic,
     tests: el.tests.map((el) => ({
       question: el.question,
       questionId: el.questionId,
@@ -235,7 +243,17 @@ const getResult = async (userId, finishAnswer) => {
     }
   });
 
-  await User.findByIdAndUpdate(userId, { startedTests: clearedStartedTests });
+  const lastTestResult = {
+    testId: finishAnswer.testId,
+    rightAnswers: result.rightAnswers,
+    wrongAnswers: result.wrongAnswers,
+  };
+
+  await User.findByIdAndUpdate(userId, {
+    startedTests: clearedStartedTests,
+    lastTestResult,
+  });
+
   return result;
 };
 
