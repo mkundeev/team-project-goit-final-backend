@@ -13,8 +13,27 @@ const answersSchema = new mongoose.Schema({
   },
 });
 
+const testResultSchema = new mongoose.Schema({
+  testId: {
+    type: String,
+    required: true,
+  },
+  rightAnswers: {
+    type: Number,
+    required: true,
+  },
+  wrongAnswers: {
+    type: Number,
+    required: true,
+  },
+});
+
 const startedTestSchema = new mongoose.Schema({
   testId: {
+    type: String,
+    required: true,
+  },
+  topic: {
     type: String,
     required: true,
   },
@@ -43,6 +62,10 @@ const usersSchema = new mongoose.Schema({
   },
   token: {
     type: String,
+    default: null,
+  },
+  lastTestResult: {
+    type: testResultSchema,
     default: null,
   },
   startedTests: {
