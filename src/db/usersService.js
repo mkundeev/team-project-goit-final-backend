@@ -254,7 +254,7 @@ const getResult = async (userId, finishAnswer) => {
     lastTestResult,
   });
 
-  return result;
+  return { result, topic: test.topic, testId: finishAnswer.testId };
 };
 
 module.exports = {

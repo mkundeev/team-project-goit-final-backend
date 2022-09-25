@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const testsRouter = require("./src/routes/tests");
 const usersRouter = require("./src/routes/users");
+const statisticRouter = require("./src/routes/statistic");
 
 const app = express();
 // const swaggerUi = require("swagger-ui-express");
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/tests", testsRouter);
 app.use("/users", usersRouter);
+app.use("/statistic", statisticRouter);
 // app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {

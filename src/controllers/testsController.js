@@ -1,5 +1,6 @@
 const testsService = require("../db/testsService");
 const usersService = require("../db/usersService");
+const statisticService = require("../db/statisticService");
 
 const getTestsList = async (req, res, next) => {
   const tests = await testsService.getTestsList();
@@ -20,8 +21,12 @@ const getRandomTests = async (req, res, next) => {
 };
 
 const getResult = async (req, res, next) => {
-  const result = await usersService.getResult(req.userId, req.body);
-  res.status(200).send(result);
+  const { result, topic, testId } = await usersService.getResult(
+    req.userId,
+    req.body
+  );
+  await statisticService.setUserStatistic(req.userId, result, topic, testId);
+  await res.status(200).send(result);
 };
 
 const setAnswer = async (req, res, next) => {
