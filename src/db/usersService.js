@@ -257,6 +257,32 @@ const getResult = async (userId, finishAnswer) => {
   return { result, topic: test.topic, testId: finishAnswer.testId };
 };
 
+const resetTest = async (userId, testId, tests) => {
+  const { startedTests } = await User.findById(userId, "startedTests");
+  const newStartedTests = startedTests.map((test) => {
+    if (test.testId === testId) {
+      return {
+        testId: test.testId,
+        tests,
+        currentIndex: 0,
+        answers: [],
+        topic: test.topic,
+      };
+    } else {
+      return test;
+    }
+  });
+
+  await User.findByIdAndUpdate(
+    userId,
+    {
+      startedTests: newStartedTests,
+    },
+    { new: true }
+  );
+  return newStartedTests;
+};
+
 module.exports = {
   addUser,
   loginUser,
@@ -266,4 +292,5 @@ module.exports = {
   setAnswer,
   getResult,
   loginUserGoogle,
+  resetTest,
 };

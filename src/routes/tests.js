@@ -8,6 +8,7 @@ const {
   getRandomTests,
   getResult,
   setAnswer,
+  resetTest,
 } = require("../controllers/testsController");
 
 const testsRouter = Router();
@@ -15,6 +16,8 @@ const testsRouter = Router();
 testsRouter.get("/", authorize, errorHandler(getTestsList));
 
 testsRouter.get("/random/:testId", authorize, errorHandler(getRandomTests));
+
+testsRouter.patch("/reset", authorize, errorHandler(resetTest));
 
 testsRouter.patch(
   "/answer",
