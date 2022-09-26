@@ -17,7 +17,6 @@ async function logInUser(req, res) {
 
 async function logInUserWithGoogle(req, res) {
   const user = await usersService.loginUserGoogle(req.body);
-  console.log(user);
   res.status(200).json({
     token: user.token,
     email: user.email,
