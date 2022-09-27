@@ -29,9 +29,6 @@ const addUser = async (body) => {
 
 const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
-  if (user.token) {
-    return user;
-  }
   if (!user) {
     throw new NotFound("Email or password is wrong");
   }
@@ -64,9 +61,6 @@ const loginUserGoogle = async (body) => {
   const { email } = ticket.getPayload();
 
   let user = await User.findOne({ email });
-  if (user.token) {
-    return user;
-  }
   if (!user) {
     user = await User.create({ email: email });
     const token = jwt.sign(
