@@ -28,7 +28,14 @@ const setUserStatistic = async (userId, result, topic, testId) => {
   }
 };
 
+const deleteTestFromStatistic = async (userId, params) => {
+  const parent = await StatisticModel.findOne({ userId });
+  parent.statistic.id(params.testId).remove();
+  parent.save();
+};
+
 module.exports = {
   getUserStatistic,
   setUserStatistic,
+  deleteTestFromStatistic,
 };
