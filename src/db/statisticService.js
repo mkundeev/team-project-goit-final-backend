@@ -2,8 +2,14 @@ const { StatisticModel } = require("./schemas/statisticSchema");
 
 const getUserStatistic = async (userId) => {
   const statistic = await StatisticModel.findOne({ userId });
+
+  if (!statistic) {
+    return { statistic: [] };
+  }
+
   return statistic;
 };
+
 const setUserStatistic = async (userId, result, topic, testId) => {
   const createAt = new Date();
   const percent = Math.round(
