@@ -30,11 +30,7 @@ router.post(
   errorHandler(logInUser)
 );
 
-router.post(
-  "/googlelogin",
-  // validation(userAuthorizationValidationSchema),
-  errorHandler(logInUserWithGoogle)
-);
+router.post("/googlelogin", errorHandler(logInUserWithGoogle));
 
 router.post("/logout", authorize, errorHandler(logOutUser));
 

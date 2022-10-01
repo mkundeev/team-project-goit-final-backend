@@ -263,13 +263,27 @@ const resetTest = async (userId, testId, tests) => {
     if (test.testId === testId) {
       return {
         testId: test.testId,
-        tests,
+        tests: test.tests.map((el) => ({
+          question: el.question,
+          questionId: el.questionId,
+          answers: el.answers,
+        })),
         currentIndex: 0,
         answers: [],
         topic: test.topic,
       };
     } else {
-      return test;
+      return {
+        testId: test.testId,
+        topic: test.topic,
+        tests: test.tests.map((el) => ({
+          question: test.question,
+          questionId: test.questionId,
+          answers: test.answers,
+        })),
+        currentIndex: test.currentIndex,
+        answers: test.answers,
+      };
     }
   });
 
