@@ -263,11 +263,7 @@ const resetTest = async (userId, testId, tests) => {
     if (test.testId === testId) {
       return {
         testId: test.testId,
-        tests: test.tests.map((el) => ({
-          question: el.question,
-          questionId: el.questionId,
-          answers: el.answers,
-        })),
+        tests,
         currentIndex: 0,
         answers: [],
         topic: test.topic,
