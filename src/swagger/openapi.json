@@ -1,0 +1,876 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "description": "pro-test back-end",
+      "url": "https://nodejs-project-goit.herokuapp.com//"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "Pro-test",
+    "description": "Team project back-end GoIt"
+  },
+  "paths": {
+    "/users/signup": {
+      "post": {
+        "summary": "signup user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "registerUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "test@test.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email in use"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "login user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "loginUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "test@test.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email is not verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email is not verified"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Wrong email all password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Wrong email all password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/googlelogin": {
+      "post": {
+        "summary": "googleLogin user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "loginUserWithGoogle",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "test@test.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email is not verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email is not verified"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Wrong email all password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Wrong email all password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "summary": "logout user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "logoutUser",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully logout user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No Content"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "summary": "get current user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getCurrenttUser",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully registered user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests": {
+      "get": {
+        "summary": "get contacts",
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "getTestsList",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tests list received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "6329ae438a32a769443212fb"
+                      },
+                      "topic": {
+                        "type": "string",
+                        "example": "Testing theory"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tests/{testId}": {
+      "get": {
+        "summary": "get test by id",
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "getTestById",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "description": "test id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "test received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/startedTest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reset": {
+      "patch": {
+        "summary": "reset test",
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "resetTest",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "testId": {
+                    "type": "string",
+                    "example": "6337e6b2734030292c4447de"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "reset test",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/startedTest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/answer": {
+      "patch": {
+        "summary": "set answer to test question",
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "answerTest",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/answerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "reset test",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/startedTest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/result": {
+      "patch": {
+        "summary": "get test result",
+        "tags": [
+          "Tests"
+        ],
+        "operationId": "getResult",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/resultRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "reset test",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/startedTest"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistic": {
+      "get": {
+        "summary": "get user statistic",
+        "tags": [
+          "Statistic"
+        ],
+        "operationId": "getStatistic",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get user statistic success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/statistic"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistic/{testId}": {
+      "delete": {
+        "summary": "delete test from user statistic",
+        "tags": [
+          "Statistic"
+        ],
+        "operationId": "deletTestFromStatistic",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "testId",
+            "in": "path",
+            "description": "test id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "delete test from user statistic success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "test was deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "userRequest": {
+        "type": "object",
+        "required": [
+          "password",
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "test@test.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "1234qwer"
+          }
+        },
+        "description": "user signup object"
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "userResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "Jhon Smith"
+          },
+          "email": {
+            "type": "string",
+            "example": "test@test.com"
+          },
+          "lastTestResult": {
+            "$ref": "#/components/schemas/lastTestResult"
+          },
+          "startedTests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/startedTest"
+            }
+          }
+        },
+        "description": "user response object"
+      },
+      "lastTestResult": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "example": "6329ae438a32a769443212fb"
+          },
+          "rightAnswers": {
+            "type": "number",
+            "example": 10
+          },
+          "wrongAnswers": {
+            "type": "number",
+            "example": 10
+          },
+          "_id": {
+            "type": "string",
+            "example": "6329ae438a32a769443212fb"
+          }
+        }
+      },
+      "startedTest": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "example": "6329ae438a32a769443212fb"
+          },
+          "topic": {
+            "type": "string",
+            "example": "Testing theory"
+          },
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/test"
+            }
+          },
+          "currentIndex": {
+            "type": "number",
+            "example": 6
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/answer"
+            }
+          }
+        }
+      },
+      "test": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "example": "Application does not allow the configuration expected by the client, is an example"
+          },
+          "questionId": {
+            "type": "number",
+            "example": 24
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "High severity and high priority"
+            }
+          }
+        }
+      },
+      "answer": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "number",
+            "example": 6
+          },
+          "answers": {
+            "type": "string",
+            "example": "High severity and low priority"
+          },
+          "_id": {
+            "type": "string",
+            "example": "6337e6b2734030292c4447de"
+          }
+        }
+      },
+      "answerRequest": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "number",
+            "example": 6
+          },
+          "answers": {
+            "type": "string",
+            "example": "High severity and low priority"
+          },
+          "testId": {
+            "type": "string",
+            "example": "6337e6b2734030292c4447de"
+          },
+          "currentIndex": {
+            "type": "number",
+            "example": 1
+          }
+        }
+      },
+      "resultRequest": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "number",
+            "example": 6
+          },
+          "answers": {
+            "type": "string",
+            "example": "High severity and low priority"
+          },
+          "testId": {
+            "type": "string",
+            "example": "6337e6b2734030292c4447de"
+          }
+        }
+      },
+      "statistic": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "example": "6329aeaf8a32a769443212fc"
+          },
+          "topic": {
+            "type": "string",
+            "example": "QA technical training"
+          },
+          "rightAnswers": {
+            "type": "number",
+            "example": 3
+          },
+          "wrongAnswers": {
+            "type": "number",
+            "example": 9
+          },
+          "percent": {
+            "type": "number",
+            "example": 25
+          },
+          "createAt": {
+            "type": "string",
+            "example": "2022-09-25T19:34:54.882Z"
+          },
+          "_id": {
+            "type": "string",
+            "example": "6330ad5e08d8dce7292679d2"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

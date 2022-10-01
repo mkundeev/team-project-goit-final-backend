@@ -7,8 +7,8 @@ const usersRouter = require("./src/routes/users");
 const statisticRouter = require("./src/routes/statistic");
 
 const app = express();
-// const swaggerUi = require("swagger-ui-express");
-// const swaggerDocument = require("./src/services/openapi.json");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./src/swagger/openapi.json");
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use("/tests", testsRouter);
 app.use("/users", usersRouter);
 app.use("/statistic", statisticRouter);
-// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
