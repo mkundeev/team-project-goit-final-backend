@@ -269,17 +269,7 @@ const resetTest = async (userId, testId, tests) => {
         topic: test.topic,
       };
     } else {
-      return {
-        testId: test.testId,
-        topic: test.topic,
-        tests: test.tests.map((el) => ({
-          question: test.question,
-          questionId: test.questionId,
-          answers: test.answers,
-        })),
-        currentIndex: test.currentIndex,
-        answers: test.answers,
-      };
+      return test;
     }
   });
 
@@ -290,7 +280,17 @@ const resetTest = async (userId, testId, tests) => {
     },
     { new: true }
   );
-  return newStartedTests;
+  return newStartedTests.map((el) => ({
+    testId: el.testId,
+    topic: el.topic,
+    tests: el.tests.map((el) => ({
+      question: el.question,
+      questionId: el.questionId,
+      answers: el.answers,
+    })),
+    currentIndex: el.currentIndex,
+    answers: el.answers,
+  }));
 };
 
 module.exports = {
