@@ -371,7 +371,7 @@
         }
       }
     },
-    "/tests/{testId}": {
+    "/tests/random/{testId}": {
       "get": {
         "summary": "get test by id",
         "tags": [
