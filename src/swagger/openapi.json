@@ -3,7 +3,7 @@
   "servers": [
     {
       "description": "pro-test back-end",
-      "url": "https://nodejs-project-goit.herokuapp.com//"
+      "url": "https://nodejs-project-goit.herokuapp.com/"
     }
   ],
   "info": {
