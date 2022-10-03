@@ -448,7 +448,7 @@
         },
         "responses": {
           "200": {
-            "description": "reset test",
+            "description": "test reseted",
             "content": {
               "application/json": {
                 "schema": {
@@ -494,7 +494,7 @@
         },
         "responses": {
           "200": {
-            "description": "reset test",
+            "description": "answer received",
             "content": {
               "application/json": {
                 "schema": {
@@ -540,7 +540,7 @@
         },
         "responses": {
           "200": {
-            "description": "reset test",
+            "description": "result received",
             "content": {
               "application/json": {
                 "schema": {
